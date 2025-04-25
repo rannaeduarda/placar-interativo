@@ -48,12 +48,10 @@
         <button class="botao reset" onclick="resetarPlacar()">Resetar Placar</button>
     </div>
 
-    <!-- Relógio -->
     <div class="relogio">
         <h2>Relógio: <span id="relogio">00:00:00</span></h2>
     </div>
 
-    <!-- Cronômetro -->
     <div class="cronometro">
         <h2>Cronômetro</h2>
         <span id="cronometro">00:00</span>
@@ -65,7 +63,6 @@
 </div>
 
 <script>
-    // Funções do Placar
     function adicionarPonto(equipe) {
         var placarEquipe1 = document.getElementById("scoreEquipe1");
         var placarEquipe2 = document.getElementById("scoreEquipe2");
@@ -98,8 +95,6 @@
             document.getElementById("nomeEquipe2").innerText = "Equipe 2";
         }
     }
-
-    // Funções para controlar os sets
     function adicionarSet(equipe) {
         var setsEquipe1 = document.getElementById("setsEquipe1");
         var setsEquipe2 = document.getElementById("setsEquipe2");
@@ -115,8 +110,6 @@
         document.getElementById("setsEquipe1").innerText = "0";
         document.getElementById("setsEquipe2").innerText = "0";
     }
-
-    // Função para atualizar o relógio
     function atualizarRelogio() {
         var now = new Date();
         var horas = now.getHours().toString().padStart(2, '0');
@@ -125,11 +118,7 @@
         
         document.getElementById('relogio').innerText = horas + ":" + minutos + ":" + segundos;
     }
-
-    // Atualizar o relógio a cada 1 segundo
     setInterval(atualizarRelogio, 1000);
-
-    // Cronômetro
     var cronometroIntervalo;
     var tempoCronometro = 0;
     var cronometroRodando = false;
