@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placar Interativo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Placar do Jogo</h1>
+
+    <div class="input-container">
+        <input type="text" id="equipe1" class="input-nome" placeholder="Nome da Equipe 1" oninput="atualizarPlacar()">
+        <input type="text" id="equipe2" class="input-nome" placeholder="Nome da Equipe 2" oninput="atualizarPlacar()">
+    </div>
+
+    <div class="placar">
+        <div class="placar-equipe" id="placarEquipe1">
+            <span id="nomeEquipe1">Equipe 1</span> <span id="scoreEquipe1">0</span>
+        </div>
+        <div class="placar-equipe" id="placarEquipe2">
+            <span id="nomeEquipe2">Equipe 2</span> <span id="scoreEquipe2">0</span>
+        </div>
+    </div>
+
+    <div class="sets">
+        <h2>Sets</h2>
+        <div class="placar-set">
+            <div>
+                <span id="setsEquipe1">0</span> Sets - <span id="setsEquipe2">0</span> Sets
+            </div>
+            <div class="botoes-sets">
+                <button class="botao" onclick="adicionarSet('equipe1')">+ Set Equipe 1</button>
+                <button class="botao" onclick="adicionarSet('equipe2')">+ Set Equipe 2</button>
+                <button class="botao reset" onclick="resetarSets()">Resetar Sets</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="botoes">
+        <button class="botao" id="botaoEquipe1" onclick="adicionarPonto('equipe1')">Equipe 1</button>
+        <button class="botao" id="botaoEquipe2" onclick="adicionarPonto('equipe2')">Equipe 2</button>
+    </div>
+
+    <div class="reset-container">
+        <button class="botao reset" onclick="resetarPlacar()">Resetar Placar</button>
+    </div>
+
+    <!-- Relógio -->
+    <div class="relogio">
+        <h2>Relógio: <span id="relogio">00:00:00</span></h2>
+    </div>
+
+    <!-- Cronômetro -->
+    <div class="cronometro">
+        <h2>Cronômetro</h2>
+        <span id="cronometro">00:00</span>
+        <div class="cronometro-botoes">
+            <button class="botao" id="startStop" onclick="controlarCronometro()">Iniciar</button>
+            <button class="botao reset" onclick="resetarCronometro()">Resetar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Funções do Placar
+    function adicionarPonto(equipe) {
+        var placarEquipe1 = document.getElementById("scoreEquipe1");
+        var placarEquipe2 = document.getElementById("scoreEquipe2");
+
+        if (equipe === 'equipe1') {
+            placarEquipe1.innerText = parseInt(placarEquipe1.innerText) + 1;
+        } else if (equipe === 'equipe2') {
+            placarEquipe2.innerText = parseInt(placarEquipe2.innerText) + 1;
+        }
+    }
+
+    function resetarPlacar() {
+        document.getElementById("scoreEquipe1").innerText = "0";
+        document.getElementById("scoreEquipe2").innerText = "0";
+    }
+
+    function atualizarPlacar() {
+        var nomeEquipe1 = document.getElementById("equipe1").value;
+        var nomeEquipe2 = document.getElementById("equipe2").value;
+
+        if (nomeEquipe1) {
+            document.getElementById("nomeEquipe1").innerText = nomeEquipe1;
+        } else {
+            document.getElementById("nomeEquipe1").innerText = "Equipe 1";
+        }
+
+        if (nomeEquipe2) {
+            document.getElementById("nomeEquipe2").innerText = nomeEquipe2;
+        } else {
+            document.getElementById("nomeEquipe2").innerText = "Equipe 2";
+        }
+    }
+
+    // Funções para controlar os sets
+    function adicionarSet(equipe) {
+        var setsEquipe1 = document.getElementById("setsEquipe1");
+        var setsEquipe2 = document.getElementById("setsEquipe2");
+
+        if (equipe === 'equipe1') {
+            setsEquipe1.innerText = parseInt(setsEquipe1.innerText) + 1;
+        } else if (equipe === 'equipe2') {
+            setsEquipe2.innerText = parseInt(setsEquipe2.innerText) + 1;
+        }
+    }
+
+    function resetarSets() {
+        document.getElementById("setsEquipe1").innerText = "0";
+        document.getElementById("setsEquipe2").innerText = "0";
+    }
+
+    // Função para atualizar o relógio
+    function atualizarRelogio() {
+        var now = new Date();
+        var horas = now.getHours().toString().padStart(2, '0');
+        var minutos = now.getMinutes().toString().padStart(2, '0');
+        var segundos = now.getSeconds().toString().padStart(2, '0');
+        
+        document.getElementById('relogio').innerText = horas + ":" + minutos + ":" + segundos;
+    }
+
+    // Atualizar o relógio a cada 1 segundo
+    setInterval(atualizarRelogio, 1000);
+
+    // Cronômetro
+    var cronometroIntervalo;
+    var tempoCronometro = 0;
+    var cronometroRodando = false;
+
+    function controlarCronometro() {
+        if (cronometroRodando) {
+            clearInterval(cronometroIntervalo);
+            document.getElementById("startStop").innerText = "Iniciar";
+        } else {
+            cronometroIntervalo = setInterval(function() {
+                tempoCronometro++;
+                var minutos = Math.floor(tempoCronometro / 60).toString().padStart(2, '0');
+                var segundos = (tempoCronometro % 60).toString().padStart(2, '0');
+                document.getElementById("cronometro").innerText = minutos + ":" + segundos;
+            }, 1000);
+            document.getElementById("startStop").innerText = "Pausar";
+        }
+        cronometroRodando = !cronometroRodando;
+    }
+
+    function resetarCronometro() {
+        clearInterval(cronometroIntervalo);
+        tempoCronometro = 0;
+        document.getElementById("cronometro").innerText = "00:00";
+        document.getElementById("startStop").innerText = "Iniciar";
+        cronometroRodando = false;
+    }
+</script>
+
+</body>
+</html>
